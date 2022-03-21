@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Asistente Inteligente',
-      initialRoute: 'login',
+      initialRoute: 'chat',
       routes: appRoutes,
     );
   }
