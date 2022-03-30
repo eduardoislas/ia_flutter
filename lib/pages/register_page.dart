@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:ia_flutter/helpers/mostrar_alerta.dart';
+import 'package:ia_flutter/services/auth_service.dart';
 import 'package:ia_flutter/widgets/blue_button.dart';
 import 'package:ia_flutter/widgets/custom_input.dart';
 import 'package:ia_flutter/widgets/labels.dart';
 import 'package:ia_flutter/widgets/logo.dart';
+import 'package:provider/provider.dart';
 
 class RegisterPage extends StatelessWidget {
   @override
@@ -46,6 +49,8 @@ class _FormState extends State<_Form> {
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+
     return Container(
       margin: EdgeInsets.only(top: 20),
       padding: EdgeInsets.symmetric(horizontal: 50),
@@ -69,11 +74,27 @@ class _FormState extends State<_Form> {
               isPassword: true),
           //TODO: Crear botón
           BotonAzul(
-            text: 'Regístrese',
-            onPressed: () {
-              print(phoneCtrl.text);
-              print(passCtrl.text);
-            },
+            text: 'Crear cuenta',
+            onPressed: authService.autenticando
+                ? () => {}
+                : () async {
+                    print(nameCtrl.text);
+                    print(phoneCtrl.text);
+                    print(passCtrl.text);
+
+                    final registroOk = await authService.register(
+                        nameCtrl.text.trim(),
+                        phoneCtrl.text.trim(),
+                        passCtrl.text.trim());
+
+                    if (registroOk == true) {
+                      //  TODO: Conectar socket server
+                      Navigator.pushReplacementNamed(context, 'usuarios');
+                    } else {
+                      mostrarAlerta(context, 'Registro incorrecto',
+                          'Revise sus credenciales nuevamente');
+                    }
+                  },
           )
         ],
       ),

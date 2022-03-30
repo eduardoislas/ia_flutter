@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:ia_flutter/helpers/mostrar_alerta.dart';
+import 'package:ia_flutter/services/auth_service.dart';
 import 'package:ia_flutter/widgets/blue_button.dart';
 import 'package:ia_flutter/widgets/custom_input.dart';
 import 'package:ia_flutter/widgets/labels.dart';
 import 'package:ia_flutter/widgets/logo.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -46,6 +49,8 @@ class _FormState extends State<_Form> {
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+
     return Container(
       margin: EdgeInsets.only(top: 20),
       padding: EdgeInsets.symmetric(horizontal: 50),
@@ -65,10 +70,23 @@ class _FormState extends State<_Form> {
           //TODO: Crear botón
           BotonAzul(
             text: 'Ingrese',
-            onPressed: () {
-              print(phoneCtrl.text);
-              print(passCtrl.text);
-            },
+            onPressed: authService.autenticando
+                ? () => {}
+                : () async {
+                    FocusScope.of(context).unfocus();
+
+                    final loginOk = await authService.login(
+                        phoneCtrl.text.trim(), passCtrl.text.trim());
+
+                    if (loginOk) {
+                      // TODO: Conectar a nuestro socket server
+                      Navigator.pushReplacementNamed(context, 'usuarios');
+                    } else {
+                      // Mostrar alerta
+                      mostrarAlerta(context, 'Login incorrecto',
+                          'Revise sus credenciales nuevamente');
+                    }
+                  },
           )
         ],
       ),
