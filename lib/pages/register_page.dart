@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ia_flutter/helpers/mostrar_alerta.dart';
 import 'package:ia_flutter/services/auth_service.dart';
+import 'package:ia_flutter/services/socket_service.dart';
 import 'package:ia_flutter/widgets/blue_button.dart';
 import 'package:ia_flutter/widgets/custom_input.dart';
 import 'package:ia_flutter/widgets/labels.dart';
@@ -50,6 +51,7 @@ class _FormState extends State<_Form> {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
+    final socketService = Provider.of<SocketService>(context);
 
     return Container(
       margin: EdgeInsets.only(top: 20),
@@ -88,7 +90,7 @@ class _FormState extends State<_Form> {
                         passCtrl.text.trim());
 
                     if (registroOk == true) {
-                      //  TODO: Conectar socket server
+                      socketService.connect();
                       Navigator.pushReplacementNamed(context, 'usuarios');
                     } else {
                       mostrarAlerta(context, 'Registro incorrecto',
