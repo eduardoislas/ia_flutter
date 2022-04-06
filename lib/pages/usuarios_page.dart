@@ -32,40 +32,48 @@ class _UsuariosPageState extends State<UsuariosPage> {
     final usuario = authService.usuario;
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            usuario?.nombre ?? 'Sin nombre',
-            style: TextStyle(color: Colors.black87),
-          ),
-          elevation: 1,
-          backgroundColor: Colors.white,
-          leading: IconButton(
-            icon: Icon(Icons.exit_to_app, color: Colors.black87),
-            onPressed: () {
-              socketService.disconnect();
-              Navigator.pushReplacementNamed(context, 'login');
-              AuthService.deleteToken();
-            },
-          ),
-          actions: <Widget>[
-            Container(
-              margin: EdgeInsets.only(right: 10),
-              child: (socketService.serverStatus == ServerStatus.Online)
-                  ? Icon(Icons.check_circle, color: Colors.blue[400])
-                  : Icon(Icons.offline_bolt, color: Colors.red),
-            )
-          ],
+      appBar: AppBar(
+        title: Text(
+          usuario?.nombre ?? 'Sin nombre',
+          style: TextStyle(color: Colors.black87),
         ),
-        body: SmartRefresher(
-          controller: _refreshController,
-          enablePullDown: true,
-          onRefresh: _cargarUsuarios,
-          header: WaterDropHeader(
-            complete: Icon(Icons.check, color: Colors.blue[400]),
-            waterDropColor: Colors.blue,
-          ),
-          child: _listViewUsuarios(),
-        ));
+        elevation: 1,
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: Icon(Icons.exit_to_app, color: Colors.black87),
+          onPressed: () {
+            socketService.disconnect();
+            Navigator.pushReplacementNamed(context, 'login');
+            AuthService.deleteToken();
+          },
+        ),
+        actions: <Widget>[
+          Container(
+            margin: EdgeInsets.only(right: 10),
+            child: (socketService.serverStatus == ServerStatus.Online)
+                ? Icon(Icons.check_circle, color: Colors.blue[400])
+                : Icon(Icons.offline_bolt, color: Colors.red),
+          )
+        ],
+      ),
+      body: SmartRefresher(
+        controller: _refreshController,
+        enablePullDown: true,
+        onRefresh: _cargarUsuarios,
+        header: WaterDropHeader(
+          complete: Icon(Icons.check, color: Colors.blue[400]),
+          waterDropColor: Colors.blue,
+        ),
+        child: _listViewUsuarios(),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, 'chatbot');
+        },
+        backgroundColor: Colors.green,
+        child: Icon(Icons.chat_sharp),
+      ),
+    );
   }
 
   ListView _listViewUsuarios() {
