@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dialogflow/dialogflow_v2.dart';
 import 'package:provider/provider.dart';
 
+import '../models/mensajes_response.dart';
 import '../services/auth_service.dart';
+import '../services/chat_service.dart';
+import '../services/socket_service.dart';
 
 class ChatbotPage extends StatefulWidget {
   ChatbotPage({Key? key, this.title}) : super(key: key);
@@ -15,15 +18,47 @@ class ChatbotPage extends StatefulWidget {
 
 class _ChatbotPageState extends State<ChatbotPage>
     with TickerProviderStateMixin {
-  final List<ChatMessage> _messages = <ChatMessage>[];
+  final List<ChatBotMessage> _messages = <ChatBotMessage>[];
   final TextEditingController _textController = new TextEditingController();
 
   late AuthService authService;
+  late SocketService socketService;
+  late ChatService chatService;
 
   @override
   void initState() {
     super.initState();
     this.authService = Provider.of<AuthService>(context, listen: false);
+    this.socketService = Provider.of<SocketService>(context, listen: false);
+    this.chatService = Provider.of<ChatService>(context, listen: false);
+
+    this.socketService.socket.on('mensaje-chatbot', _escucharMensaje);
+    _cargarHistorial(this.authService.usuario!.uid);
+    //_handleSubmitted("hola");
+    Response("hola");
+  }
+
+  void _cargarHistorial(String usuarioID) async {
+    List<Mensaje> chat = await this.chatService.getChatbot(usuarioID);
+
+    final history = chat.map(
+        (m) => new ChatBotMessage(text: m.mensaje, uid: m.de, type: m.type));
+
+    setState(() {
+      _messages.insertAll(0, history);
+    });
+  }
+
+  void _escucharMensaje(dynamic payload) {
+    ChatBotMessage message = new ChatBotMessage(
+      text: payload['mensaje'],
+      uid: payload['de'],
+      type: payload['type'],
+    );
+
+    setState(() {
+      _messages.insert(0, message);
+    });
   }
 
   Widget _buildTextComposer() {
@@ -60,32 +95,52 @@ class _ChatbotPageState extends State<ChatbotPage>
     Dialogflow dialogflow =
         Dialogflow(authGoogle: authGoogle, language: Language.spanish);
     AIResponse response = await dialogflow.detectIntent(query);
-    ChatMessage message = new ChatMessage(
+    ChatBotMessage message = new ChatBotMessage(
       text: response.getMessage() ??
           new CardDialogflow(response.getListMessage()[0]).title,
-      name: "Asistente Personal",
+      uid: authService.usuario!.uid,
       type: false,
     );
-    setState(() {
-      _messages.insert(0, message);
+    // setState(() {
+    //   _messages.insert(0, message);
+    // });
+
+    socketService.emit('mensaje-chatbot', {
+      'de': '625e6167caa674e5071f82b9',
+      'para': authService.usuario?.uid,
+      'mensaje': message.text,
+      'type': message.type
     });
   }
 
+  void _msgInicial(String text) {}
+
   void _handleSubmitted(String text) {
+    if (text.length == 0) return;
+
     _textController.clear();
-    ChatMessage message = new ChatMessage(
+    ChatBotMessage message = new ChatBotMessage(
       text: text,
-      name: authService.usuario!.nombre,
+      uid: authService.usuario!.uid,
       type: true,
     );
     setState(() {
       _messages.insert(0, message);
     });
     Response(text);
+
+    socketService.emit('mensaje-chatbot', {
+      'de': authService.usuario?.uid,
+      'para': '625e6167caa674e5071f82b9',
+      'mensaje': text,
+      'type': message.type
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final usuarioPara = '625e6167caa674e5071f82b9';
+
     return new Scaffold(
       appBar: new AppBar(
         backgroundColor: Colors.white,
@@ -122,25 +177,26 @@ class _ChatbotPageState extends State<ChatbotPage>
       ]),
     );
   }
+
+  @override
+  void dispose() {
+    // for (ChatMessage message in _messages) {
+    //   message.animationController.dispose();
+    // }
+    this.socketService.socket.off('mensaje-chatbot');
+    super.dispose();
+  }
 }
 
-class ChatMessage extends StatelessWidget {
-  ChatMessage({required this.text, required this.name, required this.type});
+class ChatBotMessage extends StatelessWidget {
+  ChatBotMessage({required this.text, required this.uid, required this.type});
 
   final String text;
-  final String name;
   final bool type;
+  final String uid;
 
   List<Widget> otherMessage(context) {
     return <Widget>[
-      new Container(
-        padding: EdgeInsets.all(2.0),
-        margin: EdgeInsets.only(right: 5.0),
-        child: new CircleAvatar(
-            child: new Text('AP',
-                style: new TextStyle(fontWeight: FontWeight.bold)),
-            backgroundColor: Color.fromARGB(255, 14, 128, 250)),
-      ),
       new Expanded(
         child: new Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -181,17 +237,6 @@ class ChatMessage extends StatelessWidget {
             ),
           ],
         ),
-      ),
-      new Container(
-        padding: EdgeInsets.all(2.0),
-        margin: EdgeInsets.only(left: 5.0),
-        child: new CircleAvatar(
-            backgroundColor: Color.fromARGB(255, 211, 211, 211),
-            child: new Text(
-              this.name[0] + this.name[1],
-              style: new TextStyle(
-                  fontWeight: FontWeight.bold, color: Colors.black),
-            )),
       ),
     ];
   }

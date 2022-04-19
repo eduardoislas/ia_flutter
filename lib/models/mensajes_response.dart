@@ -37,6 +37,7 @@ class Mensaje {
     required this.de,
     required this.para,
     required this.mensaje,
+    required this.type,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -44,6 +45,7 @@ class Mensaje {
   String de;
   String para;
   String mensaje;
+  bool type;
   DateTime createdAt;
   DateTime updatedAt;
 
@@ -51,6 +53,7 @@ class Mensaje {
         de: json["de"],
         para: json["para"],
         mensaje: json["mensaje"],
+        type: json["type"],
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
       );
@@ -59,6 +62,7 @@ class Mensaje {
         "de": de,
         "para": para,
         "mensaje": mensaje,
+        "type": type,
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
       };

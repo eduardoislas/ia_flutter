@@ -19,4 +19,17 @@ class ChatService with ChangeNotifier {
 
     return mensajesResp.mensajes;
   }
+
+  Future<List<Mensaje>> getChatbot(String usuarioID) async {
+    final resp = await http.get(
+        Uri.parse('${Environment.apiUrl}/mensajes/bot/$usuarioID'),
+        headers: {
+          'Content-Type': 'application/json',
+          'x-token': (await AuthService.getToken()).toString()
+        });
+
+    final mensajesResp = mensajesResponseFromJson(resp.body);
+
+    return mensajesResp.mensajes;
+  }
 }

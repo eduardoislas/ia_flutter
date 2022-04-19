@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:flutter/material.dart';
 import 'package:ia_flutter/routes/routes.dart';
 import 'package:ia_flutter/services/auth_service.dart';
