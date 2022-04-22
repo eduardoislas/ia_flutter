@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:ia_flutter/pages/usuarios_page.dart';
 import 'package:ia_flutter/services/socket_service.dart';
 import 'package:provider/provider.dart';
 import 'package:ia_flutter/services/auth_service.dart';
 
+import 'chatbot_page.dart';
 import 'login_page.dart';
 
 class LoadingPage extends StatelessWidget {
@@ -31,7 +31,7 @@ class LoadingPage extends StatelessWidget {
       Navigator.pushReplacement(
           context,
           PageRouteBuilder(
-              pageBuilder: (_, __, ___) => UsuariosPage(),
+              pageBuilder: (_, __, ___) => ChatbotPage(),
               transitionDuration: Duration(milliseconds: 0)));
     } else {
       Navigator.pushReplacement(

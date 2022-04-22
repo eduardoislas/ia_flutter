@@ -4,6 +4,7 @@ import 'package:ia_flutter/routes/routes.dart';
 import 'package:ia_flutter/services/auth_service.dart';
 import 'package:ia_flutter/services/chat_service.dart';
 import 'package:ia_flutter/services/socket_service.dart';
+import 'package:ia_flutter/services/ui_service.dart';
 import 'package:provider/provider.dart';
 
 void main() => runApp(MyApp());
@@ -16,6 +17,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthService()),
         ChangeNotifierProvider(create: (_) => SocketService()),
         ChangeNotifierProvider(create: (_) => ChatService()),
+        ChangeNotifierProvider(create: (_) => UiProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

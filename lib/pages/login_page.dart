@@ -82,7 +82,7 @@ class _FormState extends State<_Form> {
 
                     if (loginOk) {
                       socketService.connect();
-                      Navigator.pushReplacementNamed(context, 'usuarios');
+                      Navigator.pushReplacementNamed(context, 'chatbot');
                     } else {
                       // Mostrar alerta
                       mostrarAlerta(context, 'Login incorrecto',

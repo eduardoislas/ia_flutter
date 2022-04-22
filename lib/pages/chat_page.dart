@@ -9,6 +9,8 @@ import 'package:ia_flutter/services/socket_service.dart';
 import 'package:ia_flutter/widgets/chat_message.dart';
 import 'package:provider/provider.dart';
 
+import '../widgets/bottom_navbar.dart';
+
 class ChatPage extends StatefulWidget {
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -73,6 +75,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
+        leading: BackButton(color: Colors.blueAccent),
         title: Column(
           children: <Widget>[
             CircleAvatar(
@@ -111,6 +114,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
           ],
         ),
       ),
+      bottomNavigationBar: BottomNavBar(),
     );
   }
 

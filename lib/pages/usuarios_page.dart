@@ -7,6 +7,8 @@ import 'package:ia_flutter/services/usuarios_service.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../widgets/bottom_navbar.dart';
+
 class UsuariosPage extends StatefulWidget {
   @override
   State<UsuariosPage> createState() => _UsuariosPageState();
@@ -39,14 +41,6 @@ class _UsuariosPageState extends State<UsuariosPage> {
         ),
         elevation: 1,
         backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: Icon(Icons.exit_to_app, color: Colors.black87),
-          onPressed: () {
-            socketService.disconnect();
-            Navigator.pushReplacementNamed(context, 'login');
-            AuthService.deleteToken();
-          },
-        ),
         actions: <Widget>[
           Container(
             margin: EdgeInsets.only(right: 10),
@@ -66,13 +60,7 @@ class _UsuariosPageState extends State<UsuariosPage> {
         ),
         child: _listViewUsuarios(),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, 'chatbot');
-        },
-        backgroundColor: Colors.green,
-        child: Icon(Icons.chat_sharp),
-      ),
+      bottomNavigationBar: BottomNavBar(),
     );
   }
 
@@ -87,7 +75,7 @@ class _UsuariosPageState extends State<UsuariosPage> {
   ListTile _usuarioListTile(Usuario usuario) {
     return ListTile(
       title: Text(usuario.nombre),
-      subtitle: Text(usuario.phone),
+      // subtitle: Text(usuario.phone),
       leading: CircleAvatar(child: Text(usuario.nombre.substring(0, 2))),
       trailing: Container(
         width: 10,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dialogflow/dialogflow_v2.dart';
+import 'package:ia_flutter/widgets/bottom_navbar.dart';
 import 'package:provider/provider.dart';
 
 import '../models/mensajes_response.dart';
@@ -175,6 +176,7 @@ class _ChatbotPageState extends State<ChatbotPage>
           child: _buildTextComposer(),
         ),
       ]),
+      bottomNavigationBar: BottomNavBar(),
     );
   }
 
