@@ -11,11 +11,7 @@ import 'dart:io';
 // }
 
 class Environment {
-  static String apiUrl = Platform.isAndroid
-      ? 'asistenteapi.acislab.com/api'
-      : 'asistenteapi.acislab.com/api';
+  static String apiUrl = 'asistenteapi.acislab.com/api';
 
-  static String socketUrl = Platform.isAndroid
-      ? 'asistenteapi.acislab.com'
-      : 'asistenteapi.acislab.com';
+  static String socketUrl = 'asistenteapi.acislab.com';
 }
