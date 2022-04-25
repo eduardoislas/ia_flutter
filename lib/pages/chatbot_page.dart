@@ -36,7 +36,7 @@ class _ChatbotPageState extends State<ChatbotPage>
     this.socketService.socket.on('mensaje-chatbot', _escucharMensaje);
     _cargarHistorial(this.authService.usuario!.uid);
     //_handleSubmitted("hola");
-    Response("hola");
+    Response("init");
   }
 
   void _cargarHistorial(String usuarioID) async {
