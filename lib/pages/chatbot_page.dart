@@ -26,6 +26,8 @@ class _ChatbotPageState extends State<ChatbotPage>
   late SocketService socketService;
   late ChatService chatService;
 
+  static var _contador = 0;
+
   @override
   void initState() {
     super.initState();
@@ -36,7 +38,13 @@ class _ChatbotPageState extends State<ChatbotPage>
     this.socketService.socket.on('mensaje-chatbot', _escucharMensaje);
     _cargarHistorial(this.authService.usuario!.uid);
     //_handleSubmitted("hola");
-    Response("init");
+
+    //Variable contador durante la sesión para solo enviar init una vez
+
+    if (_contador == 0) {
+      Response("init");
+      _contador++;
+    }
   }
 
   void _cargarHistorial(String usuarioID) async {
