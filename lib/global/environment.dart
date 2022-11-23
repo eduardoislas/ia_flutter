@@ -10,6 +10,10 @@ class Environment {
       Platform.isAndroid ? 'http://10.0.2.2:3000' : 'http://localhost:3000';
 }
 
+class ContadorInicioChat {
+  static bool iniciar = true;
+}
+
 // class Environment {
 //   static String apiUrl = 'asistenteapi.acislab.com/api';
 

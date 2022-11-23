@@ -7,6 +7,7 @@ import 'package:ia_flutter/widgets/custom_input.dart';
 import 'package:ia_flutter/widgets/labels.dart';
 import 'package:ia_flutter/widgets/logo.dart';
 import 'package:provider/provider.dart';
+import '../global/environment.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -47,6 +48,14 @@ class _Form extends StatefulWidget {
 class _FormState extends State<_Form> {
   final phoneCtrl = TextEditingController();
   final passCtrl = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    //Buscar mejor localización
+    //Preguntar
+    ContadorInicioChat.iniciar = true;
+  }
 
   @override
   Widget build(BuildContext context) {

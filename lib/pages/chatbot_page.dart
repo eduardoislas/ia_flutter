@@ -7,6 +7,7 @@ import '../models/mensajes_response.dart';
 import '../services/auth_service.dart';
 import '../services/chat_service.dart';
 import '../services/socket_service.dart';
+import '../global/environment.dart';
 
 class ChatbotPage extends StatefulWidget {
   ChatbotPage({Key? key, this.title}) : super(key: key);
@@ -26,8 +27,6 @@ class _ChatbotPageState extends State<ChatbotPage>
   late SocketService socketService;
   late ChatService chatService;
 
-  static var _contador = 0;
-
   @override
   void initState() {
     super.initState();
@@ -40,10 +39,9 @@ class _ChatbotPageState extends State<ChatbotPage>
     //_handleSubmitted("hola");
 
     //Variable contador durante la sesión para solo enviar init una vez
-
-    if (_contador == 0) {
+    if (ContadorInicioChat.iniciar) {
       Response("init");
-      _contador++;
+      ContadorInicioChat.iniciar = false;
     }
   }
 
