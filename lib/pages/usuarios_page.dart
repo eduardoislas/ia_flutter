@@ -73,10 +73,21 @@ class _UsuariosPageState extends State<UsuariosPage> {
   }
 
   ListTile _usuarioListTile(Usuario usuario) {
+    //Condicional para arreglar error
+    //al querer aplicarle substring a un nombre de 1 caracter
+    String leadingCircleAvatar = "";
+    if (usuario.nombre.length >= 2) {
+      leadingCircleAvatar = usuario.nombre.substring(0, 2);
+    } else {
+      leadingCircleAvatar = usuario.nombre;
+    }
+
     return ListTile(
       title: Text(usuario.nombre),
       // subtitle: Text(usuario.phone),
-      leading: CircleAvatar(child: Text(usuario.nombre.substring(0, 2))),
+      //
+
+      leading: CircleAvatar(child: Text(leadingCircleAvatar)),
       trailing: Container(
         width: 10,
         height: 10,

@@ -84,6 +84,20 @@ class _FormState extends State<_Form> {
                     print(phoneCtrl.text);
                     print(passCtrl.text);
 
+                    //Se valida con un regex que el número teléfonico sea de 10 digitos
+                    //contando de manera opcional el número del país
+                    //Descomentar para reactivar
+                    /** final regex = RegExp(r'^[0-9]{10}$');
+                    final numeroValido = regex.hasMatch(phoneCtrl.text);
+
+                    if (!numeroValido) {
+                      mostrarAlerta(
+                          context,
+                          'Registro incorrecto',
+                          'Revise sus credenciales nuevamente. \n' +
+                              '   No es número de télefono válido.');
+                    } else {
+                      */
                     final registroOk = await authService.register(
                         nameCtrl.text.trim(),
                         phoneCtrl.text.trim(),
@@ -96,6 +110,7 @@ class _FormState extends State<_Form> {
                       mostrarAlerta(context, 'Registro incorrecto',
                           'Revise sus credenciales nuevamente');
                     }
+                    // }
                   },
           )
         ],
